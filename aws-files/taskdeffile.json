@@ -1,5 +1,5 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-2:368740523992:task-definition/vproapp-github-tdef:1",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-2:368740523992:task-definition/vproapp-github-tdef:4",
   "containerDefinitions": [
     {
       "name": "vproapp",
@@ -36,7 +36,7 @@
   "family": "vproapp-github-tdef",
   "executionRoleArn": "arn:aws:iam::368740523992:role/ecsTaskExecutionRole",
   "networkMode": "awsvpc",
-  "revision": 1,
+  "revision": 4,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -74,7 +74,7 @@
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "1024",
   "memory": "2048",
-  "registeredAt": "2026-09-06T11:58:51.048Z",
+  "registeredAt": "2026-09-06T14:51:42.985Z",
   "registeredBy": "arn:aws:iam::368740523992:root",
   "enableFaultInjection": false,
   "tags": [
