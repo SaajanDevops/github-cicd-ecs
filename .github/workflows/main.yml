@@ -1,5 +1,7 @@
 name: github-ci-cd
 on: workflow_dispatch
+env:
+  AWS_REGION: us-east-2
 jobs:
   Testing:
     runs-on: ubuntu-latest
@@ -43,3 +45,34 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  BUILD_AND_PUBLISH:
+    needs: Testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+
+      - name: Update application.properties file
+        run: |
+          sed -i "s/^jdbc.username.*$/jdbc.username\=${{ secrets.RDS_USER }}/" src/main/resources/application.properties
+          sed -i "s/^jdbc.password.*$/jdbc.password\=${{ secrets.RDS_PASS }}/" src/main/resources/application.properties
+          sed -i "s/db01/${{ secrets.RDS_ENDPOINT }}/" src/main/resources/application.properties
+
+          sed -i "s/^rabbitmq.address.*$/rabbitmq.address=${{ secrets.RABBIT_ENDPOINT }}/" src/main/resources/application.properties
+          sed -i "s/^rabbitmq.port.*$/rabbitmq.port=${{ secrets.RABBIT_PORT }}/" src/main/resources/application.properties
+          sed -i "s/^rabbitmq.username.*$/rabbitmq.username=${{ secrets.RABBIT_USER }}/" src/main/resources/application.properties
+          sed -i "s/^rabbitmq.password.*$/rabbitmq.password=${{ secrets.RABBIT_PASS }}/" src/main/resources/application.properties
+
+      - name: Build & Upload image to ECR
+        uses: appleboy/docker-ecr-action@master
+        with:
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          registry: ${{ secrets.REGISTRY }}
+          repo: github-ci-cd
+          region: ${{ env.AWS_REGION }}
+          tags: latest,${{ github.run_number }}
+          daemon_off: false
+          dockerfile: ./Dockerfile
+          context: ./
