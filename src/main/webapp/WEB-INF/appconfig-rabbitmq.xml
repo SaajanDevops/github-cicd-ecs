@@ -12,53 +12,6 @@
 
 	<rabbit:annotation-driven />
 
-	<!-- RabbitMQ client connection factory with SSL/TLS enabled -->
-	<bean id="rabbitConnectionFactory"
-		class="org.springframework.amqp.rabbit.connection.RabbitConnectionFactoryBean">
-		<property name="useSSL" value="true" />
-	</bean>
-
-	<!-- Spring AMQP connection factory -->
-	<rabbit:connection-factory
-		id="connectionFactory"
-		connection-factory="rabbitConnectionFactory"
-		host="${rabbitmq.address}"
-		port="${rabbitmq.port}"
-		username="${rabbitmq.username}"
-		password="${rabbitmq.password}" />
-
-	<!-- RabbitMQ administration -->
-	<rabbit:admin connection-factory="connectionFactory" />
-
-	<!-- RabbitMQ template -->
-	<rabbit:template
-		id="amqpTemplate"
-		connection-factory="connectionFactory" />
-
-	<!-- RabbitMQ listener container -->
-	<bean id="rabbitListenerContainerFactory"
-		class="org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory">
-		<property name="connectionFactory" ref="connectionFactory" />
-		<property name="concurrentConsumers" value="3" />
-		<property name="maxConcurrentConsumers" value="10" />
-	</bean>
-
-</beans>
-
-<!-- <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:beans="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-						http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
-						http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
-
-	<rabbit:annotation-driven />
-
 	<rabbit:connection-factory id="connectionFactory" host="${rabbitmq.address}"
 		port="${rabbitmq.port}" username="${rabbitmq.username}"
 		password="${rabbitmq.password}" />
@@ -74,4 +27,4 @@
 		<property name="concurrentConsumers" value="3" />
 		<property name="maxConcurrentConsumers" value="10" />
 	</bean>
-</beans> -->
+</beans>

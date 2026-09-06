@@ -64,11 +64,6 @@ jobs:
           sed -i "s/^jdbc.password.*$/jdbc.password\=${{ secrets.RDS_PASS }}/" src/main/resources/application.properties
           sed -i "s/db01/${{ secrets.RDS_ENDPOINT }}/" src/main/resources/application.properties
 
-          sed -i "s/^rabbitmq.address.*$/rabbitmq.address=${{ secrets.RABBIT_ENDPOINT }}/" src/main/resources/application.properties
-          sed -i "s/^rabbitmq.port.*$/rabbitmq.port=${{ secrets.RABBIT_PORT }}/" src/main/resources/application.properties
-          sed -i "s/^rabbitmq.username.*$/rabbitmq.username=${{ secrets.RABBIT_USER }}/" src/main/resources/application.properties
-          sed -i "s/^rabbitmq.password.*$/rabbitmq.password=${{ secrets.RABBIT_PASS }}/" src/main/resources/application.properties
-
       - name: Build & Upload image to ECR
         uses: appleboy/docker-ecr-action@master
         with:
@@ -104,7 +99,7 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ secrets.REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.run_number }}
 
-      - name: Deploy Amazon ECS task definition
+      - name: Deploy Amazon ECS task definitions
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
